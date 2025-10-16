@@ -1,0 +1,179 @@
+\usepackage{suffix}
+\usepackage{mathpartir}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Programming language macros
+
+\newcommand{\stepsto}{\stepsone^*} % large-step
+\newcommand{\stepstot}[1]{\stepsonet{#1}\hspace{-5pt}\raisebox{4pt}{\scriptsize *}\:} % large-step
+\newcommand{\concat}{\cdot} % large-step
+\newcommand{\stepsone}{\longrightarrow} % small-step
+\newcommand{\noevent}{\cdot}
+\newcommand{\stepsonet}[1]{\overset{#1}{\longrightarrow}}
+\newcommand{\subst}[3]{{#1}[{#2}\mapsto {#3}]}
+
+\newcommand{\Rule}[4][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  %\hfill
+  \ensuremath{\inferrule{#3}{#4}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand{\NrwRule}[5][]{
+  [\textsc{#3}]~
+  \label{rule:#2}
+  \hfill
+  \ensuremath{\inferrule*[narrower=#2]{#4}{#5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+
+\newcommand\ruleref[1]{%
+  \@ifundefined{r@rule:#1}{%
+    \textsc{#1} %
+  }{%
+    \hyperref[rule:#1]{\textsc{#1}}%
+  }%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%%% Misc PL 
+
+\newcommand{\proj}[2]{"proj"_{#1}~#2}
+\newcommand{\pone}[1]{\proj{1}{#1}}
+\newcommand{\ptwo}[1]{\proj{2}{#1}}
+\newcommand{\proji}[1]{\proj{i}{#1}}
+\newcommand{\projj}[1]{\proj{j}{#1}}
+
+\newcommand{\injname}[1]{"inj"_{#1}}
+\newcommand{\inj}[2]{\injname{#1}~#2}
+\newcommand{\ione}[2]{\inj{1}{#2}}
+\newcommand{\itwo}[2]{\inj{2}{#2}}
+\newcommand{\inji}[1]{\inj{i}{#1}}
+\newcommand{\injj}[1]{\inj{j}{#1}}
+\newcommand{\injnamea}[2]{"inj"^{#1}_{#2}}
+\newcommand{\casexp}[4]{"case"~{#1}~"of"~\injname{1}({#2}).{#3} \mid \injname{2}({#2}).{#4}}
+
+\newcommand{\casexpan}[5]{"case"{^\tau}~{#1}~"of"~\injnamea{#5}{1}({#2}).{#3} \mid \injnamea{#5}{2}({#2}).{#4}}
+\newcommand{\casexpa}[1]{"case"~{#1}~"of"}
+\newcommand{\casexpb}[2]{\ione{\hspace{-3pt}(#1)}.\;{#2}}
+\newcommand{\casexpc}[2]{|~\itwo{\hspace{-3pt}(#1)}.\;#2}
+\newcommand{\caseonly}{"case"}
+
+
+\newcommand{\tfuncpc}[3]{\ensuremath{\forall{#1}{[#2]}.\,#3}}
+\newcommand{\tlam}[3]{\Lambda {#1}[{#2}].\,#3}
+\newcommand{\tfunc}[3]{\forall{#1}[{#2}].\,#3}
+\newcommand{\lamc}[4]{\lambda ({#1}\ty{#2})\secctxt{#3} .\,#4}
+\newcommand{\lamcs}[3]{\lambda ({#1})\secctxt{#2} .\,#3}
+\newcommand{\pair}[2]{{\langle \ensuremath{#1, #2} \rangle}}
+\newcommand{\prodtype}[2]{(#1 \times  #2)}
+\newcommand{\sumtype}[2]{(#1 +  #2)}
+\newcommand{\func}[3]{#1 \xrightarrow{#2} #3}
+
+% evaluation rule
+% #1 - side condition
+% #2 - rule name
+% #3 - premises
+% #4 - from expression
+% #5 - to expression
+\newcommand\erule[5][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  \hfill
+  \ensuremath{\inferrule{#3}{#4 \stepsone #5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand\edrule[4][]{
+  \hfill
+  \ensuremath{\inferrule{#2}{#3 \stepsone #4}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand\derule[5][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  %\hfill
+  \ensuremath{\inferrule{#3}{#4 \Longrightarrow #5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand\derulesplit[5][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  %\hfill
+  \ensuremath{\inferrule{#3}{{#4} \Longrightarrow \\ {#5}}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand\conrule[5][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  \hfill
+  \ensuremath{\inferrule{#3}{#4 \Longrightarrow #5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+\newcommand\defrule[6][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  \hfill
+  \ensuremath{\inferrule{#3}{#4 \Longrightarrow^{^{#6}} #5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+
+\newcommand\berule[5]{
+  [\textsc{#1}]~
+  \label{rule:#1}
+  \hfill
+  \ensuremath{\inferrule{#2}{#3
+      \ifthenelse{\equal{#5}{}}
+          {\stepsone}
+          {\stepsonet{#5}} #4}}
+  \hfill
+}
+\WithSuffix\newcommand\berule*[5]{\berule{#1}{#2}{#3}{#4}{#5}}
+
+
+\newcommand\erulong[2][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  \ifx{#1}\empty\else~\text{#1}\fi
+}
+\newcommand\erulelemma[5][]{
+	    \label{rule:#2}
+	      \hfill
+	        \ensuremath{\inferrule{#3}{#4 \stepsone #5}}\ifx{#1}\empty\else~\text{#1}\fi
+		  \hfill
+		  }
+\newcommand\erulet[6][]{
+  [\textsc{#2}]~
+  \label{rule:#2}
+  \hfill
+  \ensuremath{\inferrule{#3}{#4 \stepsone_{#6} #5}}\ifx{#1}\empty\else~\text{#1}\fi
+  \hfill
+}
+
+% appendix rules
+\newcommand{\refmakeapprule}[2]{\ifcompleteappx\ref{#2}\else\makeappxrule{#1}{#2}\fi}
+\newcommand{\makeappxrule}[2]{#1\label{#2}}
+
+
+% Deactivate the ACM style file definition of the proof environment to
+% avoid collision with amsthm.
+%\let\proof=\@undefined
+%\let\endproof=\@undefined
+%\def\@copyrightspace{}
+
+\makeatletter
+\newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+\newcommand{\pushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+\newcommand{\triangleiff}{\ensuremath{\overset{\triangle}{\iff}}}
+\makeatother
+
+%%%
+
+% Environment for centring text without adding vertical space around it.
+\newenvironment{nscenter}
+  {\parskip=0pt\par\nopagebreak\centering}
+  {\par\noindent\ignorespacesafterend}
+
+% Tabular math environment.
+\newenvironment{matharray}[1]
+  {\begin{displaymath}\begin{array}{#1}}
+  {\end{array}\end{displaymath}}
+
